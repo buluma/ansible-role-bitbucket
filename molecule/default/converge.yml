@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: buluma.bootstrap
+    - role: buluma.git
+    - role: buluma.openjdk
+    - role: ansible-role-bitbucket
