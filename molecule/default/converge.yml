@@ -7,5 +7,5 @@
   roles:
     - role: buluma.bootstrap
     - role: buluma.git
-    - role: buluma.openjdk
+    - role: buluma.java
     - role: ansible-role-bitbucket
