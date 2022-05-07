@@ -1,6 +1,6 @@
 ---
 
-- name: yum install
+- name: yum install packages
   ansible.builtin.yum:
     name: "{{ item.name }}"
     state: "{{ item.state }}"

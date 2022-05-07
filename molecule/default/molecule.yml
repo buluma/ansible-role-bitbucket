@@ -16,6 +16,9 @@ driver:
 platforms:
   - name: "bitbucket-${image:-docker-centos7-ansible}-${tag:-latest}${TOX_ENVNAME}"
     image: "${namespace:-buluma}/${image:-docker-centos7-ansible}:${tag:-latest}"
+    published_ports:
+      - 8090/tcp
+      - 8443/tcp
     command: /sbin/init
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro

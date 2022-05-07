@@ -1,5 +1,5 @@
 ---
-- name: apt-get install
+- name: apt-get install packages
   ansible.builtin.apt:
     name: "{{ item.name }}"
     state: "{{ item.state }}"

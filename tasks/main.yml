@@ -134,13 +134,13 @@
   changed_when: false
   failed_when: false
 
-- name: groupadd
+- name: add bitbucket group
   ansible.builtin.group:
     name: "{{ bitbucket_group }}"
     system: true
     state: "present"
 
-- name: useradd
+- name: add bitbucket user
   ansible.builtin.user:
     name: "{{ bitbucket_owner }}"
     group: "{{ bitbucket_group }}"
