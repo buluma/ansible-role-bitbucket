@@ -22,6 +22,8 @@ molecule:
         tag: "bionic"
       - image: "docker-ubuntu-systemd"
         tag: "focal"
+      - image: "docker-ubuntu-systemd"
+        tag: "jammy"
       - image: "enterpriselinux"
         tag: "7"
       - image: "enterpriselinux"
@@ -35,13 +37,15 @@ molecule:
       - image: "fedora-systemd"
         tag: "34"
       - image: "fedora-systemd"
+        tag: "35"
+      - image: "fedora-systemd"
         tag: "latest"
 
 testing:
   stage: test
   needs: []
   script:
-    - image=${image} tag=${tag} molecule -v test
+    - image=${image} tag=${tag} molecule test
   rules:
     - if: $CI_COMMIT_REF_NAME == "testing"
   retry: 1
@@ -53,6 +57,8 @@ testing:
         tag: "bionic"
       - image: "docker-ubuntu-systemd"
         tag: "focal"
+      - image: "docker-ubuntu-systemd"
+        tag: "jammy"
       - image: "enterpriselinux"
         tag: "7"
       - image: "enterpriselinux"
@@ -65,6 +71,8 @@ testing:
         tag: "bookworm"
       - image: "fedora-systemd"
         tag: "34"
+      - image: "fedora-systemd"
+        tag: "35"
       - image: "fedora-systemd"
         tag: "latest"
 
@@ -88,6 +96,8 @@ role_testing:
         tag: "bionic"
       - image: "docker-ubuntu-systemd"
         tag: "focal"
+      - image: "docker-ubuntu-systemd"
+        tag: "jammy"
       - image: "enterpriselinux"
         tag: "7"
       - image: "enterpriselinux"
@@ -100,6 +110,8 @@ role_testing:
         tag: "bookworm"
       - image: "fedora-systemd"
         tag: "34"
+      - image: "fedora-systemd"
+        tag: "35"
       - image: "fedora-systemd"
         tag: "latest"
 
