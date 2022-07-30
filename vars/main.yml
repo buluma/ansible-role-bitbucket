@@ -21,3 +21,16 @@ _bitbucket_download:
     url: "http://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-7.20.0.tar.gz"
     dest: "/var/cache/ansible/5a5d0d72eec7ef4fca40d56fdeb29f55ff31db9c427367012fd0de578be115f6/atlassian-bitbucket-7.20.0.tar.gz"
     checksum: "5a5d0d72eec7ef4fca40d56fdeb29f55ff31db9c427367012fd0de578be115f6"
+
+_bitbucket_package:
+  Debian:
+    - fontconfig
+    - git
+  RedHat-7:
+    - fontconfig
+    - git
+  RedHat:
+    - fontconfig
+    - git
+
+bitbucket_package: "{{ _bitbucket_package[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_bitbucket_package[ansible_os_family] | default(_bitbucket_package['default'] )) }}"
