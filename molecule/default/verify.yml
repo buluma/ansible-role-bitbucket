@@ -3,7 +3,7 @@
   remote_user: root
   become: true
   tasks:
-    - name: check page
+    - name: Check page
       ansible.builtin.uri:
         url: "http://127.0.0.1:7990"
         status_code: "200"
@@ -15,6 +15,6 @@
       until: result.status == 200
       retries: 30
 
-    - name: check result
+    - name: Check result
       ansible.builtin.fail:
       when: "'bitbucket' not in result.content"
