@@ -11,6 +11,9 @@ _postgresql_jdbc_download:
 _bitbucket_version:
   "7.21": "7.21.0"
   "7.20": "7.20.0"
+  "8.16": "8.16.1"
+  "8.15": "8.15.2"
+  "8.9": "8.9.8"
 
 _bitbucket_download:
   "7.21.0":
