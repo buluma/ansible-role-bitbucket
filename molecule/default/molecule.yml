@@ -20,10 +20,6 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     cgroupns_mode: host
-    capabilities:
-      - SYS_ADMIN
-    published_ports:
-      - 127.0.0.1:7990:7990
     privileged: yes
     pre_build_image: yes
 provisioner:

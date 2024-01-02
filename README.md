@@ -18,9 +18,6 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
   gather_facts: yes
 
   roles:
-    - role: buluma.bootstrap
-    - role: buluma.git
-    - role: buluma.java
     - role: buluma.bitbucket
 ```
 
@@ -47,7 +44,7 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 
 ```yaml
 ---
-
+# https://github.com/alvistack/ansible-role-bitbucket/tree/master/defaults
 # PostgreSQL JDBC release.
 postgresql_jdbc_release: "42.3"
 
@@ -126,11 +123,8 @@ This role has been tested on these [container images](https://hub.docker.com/u/b
 
 |container|tags|
 |---------|----|
-|[Ubuntu](https://hub.docker.com/repository/docker/buluma/ubuntu/general)|all|
 |[EL](https://hub.docker.com/repository/docker/buluma/enterpriselinux/general)|all|
 |[opensuse](https://hub.docker.com/repository/docker/buluma/opensuse/general)|all|
-|[Debian](https://hub.docker.com/repository/docker/buluma/debian/general)|all|
-|[Fedora](https://hub.docker.com/repository/docker/buluma/fedora/general)|all|
 
 The minimum version of Ansible required is 2.12, tests have been done to:
 
@@ -152,5 +146,3 @@ If you find issues, please register them in [GitHub](https://github.com/buluma/a
 
 [Shadow Walker](https://buluma.github.io/)
 
-
-Template inspired by [Robert de Bock](https://github.com/robertdebock)
