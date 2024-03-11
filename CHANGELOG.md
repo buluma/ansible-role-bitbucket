@@ -1,11 +1,12 @@
 # Changelog
 
-## [Unreleased](https://github.com/buluma/ansible-role-bitbucket/tree/HEAD)
+## [v24.2.26](https://github.com/buluma/ansible-role-bitbucket/tree/v24.2.26) (2024-02-19)
 
-[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v0.3.0...HEAD)
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v0.3.0...v24.2.26)
 
 **Merged pull requests:**
 
+- Bump release-drafter/release-drafter from 5 to 6 [\#14](https://github.com/buluma/ansible-role-bitbucket/pull/14) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump release-drafter/release-drafter from 5 to 6 [\#13](https://github.com/buluma/ansible-role-bitbucket/pull/13) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v0.3.0](https://github.com/buluma/ansible-role-bitbucket/tree/v0.3.0) (2024-01-20)
