@@ -14,8 +14,8 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
 ---
 - name: Converge
   hosts: all
-  become: yes
-  gather_facts: yes
+  become: true
+  gather_facts: true
 
   roles:
     - role: buluma.bitbucket
@@ -27,13 +27,14 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
 ---
 - name: Prepare
   hosts: all
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
 
   roles:
     - name: buluma.bootstrap
     - name: buluma.git
     - name: buluma.java
+    - name: buluma.openjdk
 ```
 
 Also see a [full explanation and example](https://buluma.github.io/how-to-use-these-roles.html) on how to use these roles.
@@ -45,54 +46,45 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 ```yaml
 ---
 # https://github.com/alvistack/ansible-role-bitbucket/tree/master/defaults
-# PostgreSQL JDBC release.
-postgresql_jdbc_release: "42.3"
-
-# PostgreSQL JDBC version.
-postgresql_jdbc_version: "{{ _postgresql_jdbc_version[postgresql_jdbc_release] }}"
-
-# PostgreSQL JDBC download details.
-postgresql_jdbc_download: "{{ _postgresql_jdbc_download[postgresql_jdbc_version] }}"
-
 # Bitbucket release.
-bitbucket_release: "7.21"
+bitbucket_release: "8.19"
 
 # Bitbucket version.
 bitbucket_version: "{{ _bitbucket_version[bitbucket_release] }}"
 
-# Bitbucket download details.
-bitbucket_download: "{{ _bitbucket_download[bitbucket_version] }}"
-
 # Owner and group for Bitbucket.
-bitbucket_owner: "bitbucket"
-bitbucket_group: "bitbucket"
+bitbucket_owner: bitbucket
+bitbucket_group: bitbucket
 
 # Bitbucket home directory.
-bitbucket_home: "/var/atlassian/application-data/bitbucket"
+bitbucket_home: /var/atlassian/application-data/bitbucket
 
 # Bitbucket installation directory.
-bitbucket_catalina: "/opt/atlassian/bitbucket"
+bitbucket_catalina: /opt/atlassian/bitbucket
 
 # JVM minimal and maximum memory usage.
-bitbucket_jvm_minimum_memory: "2048m"
-bitbucket_jvm_maximum_memory: "2048m"
+bitbucket_jvm_minimum_memory: 2048m
+bitbucket_jvm_maximum_memory: 2048m
+bitbucket_jvm_reserved_code_cache_size: 512m
 
 # Proxy and context path setup.
-bitbucket_catalina_connector_proxyname: ~
-bitbucket_catalina_connector_proxyport: ~
-bitbucket_catalina_connector_scheme: "http"
-bitbucket_catalina_connector_secure: "false"
-bitbucket_catalina_context_path: ~
-
+bitbucket_catalina_connector_port: "7990"
+bitbucket_catalina_connector_scheme:
+bitbucket_catalina_connector_secure:
+bitbucket_catalina_connector_proxyname:
+bitbucket_catalina_connector_proxyport:
+bitbucket_catalina_context_path:
 # Atlassian Support recommended JVM arguments.
 bitbucket_jvm_support_recommended_args: >-
   -Datlassian.plugins.enable.wait=300
+  -XX:+IgnoreUnrecognizedVMOptions
   -XX:+UnlockExperimentalVMOptions
-  -XX:+UseCGroupMemoryLimitForHeap
-  -XX:MaxRAMFraction=1
 
-# Session timeout (in mintues).
+# Session timeout (120 minutes = 2 hours).
 bitbucket_session_timeout: "120"
+
+# Remember Me timeout (10080 minutes = 168 hours = 7 days).
+bitbucket_autologin_cookie_age: "10080"
 ```
 
 ## [Requirements](#requirements)
@@ -123,8 +115,11 @@ This role has been tested on these [container images](https://hub.docker.com/u/b
 
 |container|tags|
 |---------|----|
+|[Ubuntu](https://hub.docker.com/repository/docker/buluma/ubuntu/general)|all|
 |[EL](https://hub.docker.com/repository/docker/buluma/enterpriselinux/general)|all|
 |[opensuse](https://hub.docker.com/repository/docker/buluma/opensuse/general)|all|
+|[Debian](https://hub.docker.com/repository/docker/buluma/debian/general)|all|
+|[Fedora](https://hub.docker.com/repository/docker/buluma/fedora/general)|all|
 
 The minimum version of Ansible required is 2.12, tests have been done to:
 

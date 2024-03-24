@@ -8,8 +8,8 @@
 
 - name: Systemctl restart bitbucket.service
   ansible.builtin.service:
-    name: "bitbucket.service"
-    state: "restarted"
+    name: bitbucket.service
+    state: restarted
     enabled: true
   loop: "{{ ansible_play_hosts }}"
   delegate_to: "{{ item }}"
