@@ -24,7 +24,8 @@ platforms:
     pre_build_image: true
     published_ports:
       - 7990/tcp
-      - 0.0.0.0:7990->7990/tcp
+      - 127.0.0.1:7990:7990
+      - 127.0.0.1:7990:7990/tcp
 provisioner:
   name: ansible
 verifier:
