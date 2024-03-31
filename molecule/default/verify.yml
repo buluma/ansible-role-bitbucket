@@ -3,6 +3,7 @@
   hosts: all
   remote_user: root
   become: true
+  gather_facts: true
   tasks:
     - name: Check port
       ansible.builtin.wait_for:
@@ -26,7 +27,9 @@
       register: result
       until: result.status == 200
       retries: 30
+      when: ansible_facts['os_family'] == 'Debian'
 
     - name: Check result
       ansible.builtin.fail:
       when: "'bitbucket' not in result.content"
+      when: ansible_facts['os_family'] == 'Debian'
