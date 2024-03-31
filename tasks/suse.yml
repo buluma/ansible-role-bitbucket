@@ -1,6 +1,6 @@
 ---
 
-- name: suse | rpm --import
+- name: suse | Rpm --import
   vars:
     ansible_python_interpreter: python3
   ansible.builtin.rpm_key:
@@ -11,7 +11,7 @@
   register: result
   until: result is succeeded
 
-- name: suse | yum-config-manager --add-repo
+- name: suse | Yum-config-manager --add-repo
   ansible.builtin.yum_repository:
     file: "{{ item.file }}"
     name: "{{ item.name }}"
@@ -26,7 +26,7 @@
     reposdir: "{{ item.reposdir | default('/etc/zypp/repos.d') }}"
   loop: "{{ _yum_repository }}"
 
-- name: suse | zypper removelock
+- name: suse | Zypper removelock
   ansible.builtin.command:
     cmd: zypper removelock {{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
   loop: "{{ _zypper }}"
@@ -34,7 +34,7 @@
   changed_when: false
   failed_when: false
 
-- name: suse | zypper install
+- name: suse | Zypper install
   vars:
     ansible_python_interpreter: python3
   community.general.zypper:
@@ -47,7 +47,7 @@
   notify:
     - Systemctl restart bitbucket.service
 
-- name: suse | zypper addlock
+- name: suse | Zypper addlock
   ansible.builtin.command:
     cmd: zypper addlock {{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
   loop: "{{ _zypper }}"

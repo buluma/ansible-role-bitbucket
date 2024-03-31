@@ -103,8 +103,8 @@
       group: "{{ bitbucket_group }}"
       mode: "0755"
   notify:
-    - bitbucket | systemctl daemon-reload
-    - bitbucket | systemctl restart bitbucket.service
+    - Systemctl daemon-reload
+    - Systemctl restart bitbucket.service
 
 - name: Prepare files
   ansible.builtin.file:

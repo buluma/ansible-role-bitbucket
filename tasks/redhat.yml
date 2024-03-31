@@ -1,6 +1,6 @@
 ---
 
-- name: redhat | rpm --import
+- name: redhat | Rpm --import
   ansible.builtin.rpm_key:
     key: "{{ item.key }}"
     fingerprint: "{{ item.fingerprint }}"
@@ -9,7 +9,7 @@
   register: result
   until: result is succeeded
 
-- name: redhat | yum-config-manager --add-repo
+- name: redhat | Yum-config-manager --add-repo
   ansible.builtin.yum_repository:
     file: "{{ item.file }}"
     name: "{{ item.name }}"
@@ -23,7 +23,7 @@
     state: "{{ item.state }}"
   loop: "{{ _yum_repository }}"
 
-- name: redhat | yum versionlock delete
+- name: redhat | Yum versionlock delete
   community.general.yum_versionlock:
     name: "{{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\\..*$', '\\1-*') }}"
     state: absent
@@ -32,7 +32,7 @@
   changed_when: false
   failed_when: false
 
-- name: redhat | yum install
+- name: redhat | Yum install
   ansible.builtin.yum:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
@@ -40,9 +40,9 @@
   register: result
   until: result is succeeded
   notify:
-    - bitbucket | systemctl restart bitbucket.service
+    - Systemctl restart bitbucket.service
 
-- name: redhat | yum versionlock add
+- name: redhat | Yum versionlock add
   community.general.yum_versionlock:
     name: "{{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\\..*$', '\\1-*') }}"
     state: present
