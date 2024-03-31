@@ -4,7 +4,7 @@
   remote_user: root
   become: true
   tasks:
-    - name: check port
+    - name: Check port
       ansible.builtin.wait_for:
         port: 7990
         timeout: 300
@@ -15,7 +15,7 @@
       until: result is succeeded
       retries: 30
 
-    - name: check page
+    - name: Check page
       ansible.builtin.uri:
         url: http://localhost:7990
         status_code: 200
@@ -27,6 +27,6 @@
       until: result.status == 200
       retries: 30
 
-    - name: check result
+    - name: Check result
       ansible.builtin.fail:
       when: "'bitbucket' not in result.content"
