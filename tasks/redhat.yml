@@ -32,8 +32,8 @@
   changed_when: false
   failed_when: false
 
-- name: redhat | Yum install
-  ansible.builtin.yum:
+- name: redhat | DNF install
+  ansible.builtin.dnf:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   loop: "{{ _yum }}"
