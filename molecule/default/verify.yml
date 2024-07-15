@@ -31,5 +31,4 @@
 
     - name: Check result
       ansible.builtin.fail:
-      when: "'bitbucket' not in result.content"
-      when: ansible_facts['os_family'] == 'Debian'
+      when: "'bitbucket' not in result.content and ansible_facts['os_family'] == 'Debian"
