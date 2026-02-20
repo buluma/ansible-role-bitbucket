@@ -1,5 +1,4 @@
 ---
-
 - name: redhat | Rpm --import
   ansible.builtin.rpm_key:
     key: "{{ item.key }}"
