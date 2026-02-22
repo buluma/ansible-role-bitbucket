@@ -1,11 +1,9 @@
----
-- name: Prepare
-  hosts: all
+- become: true
   gather_facts: false
-  become: true
-
+  hosts: all
+  name: Prepare
   roles:
-    - name: buluma.bootstrap
-    - name: buluma.git
-    - name: buluma.java
-    - name: buluma.openjdk
+  - name: buluma.bootstrap
+  - name: buluma.git
+  - name: buluma.java
+  - name: buluma.openjdk

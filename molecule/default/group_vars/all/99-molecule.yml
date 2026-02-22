@@ -1,4 +1,2 @@
----
-openjdk_release: "17"
-
-git_release: "2.42"
+git_release: '2.42'
+openjdk_release: '17'
