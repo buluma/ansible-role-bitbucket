@@ -1,3 +1,4 @@
+---
   - ansible.builtin.apt_key:
       id: '{{ item.id }}'
       keyring: '{{ item.keyring }}'

@@ -1,3 +1,4 @@
+---
 _zypper:
   - name: fontconfig
     state: latest

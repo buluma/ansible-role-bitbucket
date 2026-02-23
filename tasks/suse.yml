@@ -1,3 +1,4 @@
+---
   - ansible.builtin.rpm_key:
       fingerprint: '{{ item.fingerprint }}'
       key: '{{ item.key }}'

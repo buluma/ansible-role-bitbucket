@@ -1,3 +1,4 @@
+---
 _apt:
   - name: atlassian-bitbucket=100:{{ bitbucket_version }}*
     state: present

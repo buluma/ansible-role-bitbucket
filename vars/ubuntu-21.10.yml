@@ -1,3 +1,4 @@
+---
 _apt:
   - name: fontconfig
     state: latest

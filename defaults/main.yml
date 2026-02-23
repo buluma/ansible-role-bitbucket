@@ -1,3 +1,4 @@
+---
 bitbucket_autologin_cookie_age: '10080'
 bitbucket_catalina: /opt/atlassian/bitbucket
 bitbucket_catalina_connector_port: '7990'

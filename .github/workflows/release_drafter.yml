@@ -1,3 +1,4 @@
+---
 name: Release Drafter
 true:
   pull_request:
