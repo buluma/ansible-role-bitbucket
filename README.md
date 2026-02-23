@@ -11,26 +11,26 @@ Ansible Role for Atlassian Bitbucket Installation
 This example is taken from [`molecule/default/converge.yml`](https://github.com/buluma/ansible-role-bitbucket/blob/master/molecule/default/converge.yml) and is tested on each push, pull request and release.
 
 ```yaml
-- become: true
-  gather_facts: true
-  hosts: all
-  name: Converge
-  roles:
-  - role: buluma.bitbucket
+  - become: true
+    gather_facts: true
+    hosts: all
+    name: Converge
+    roles:
+      - role: buluma.bitbucket
 ```
 
 The machine needs to be prepared. In CI this is done using [`molecule/default/prepare.yml`](https://github.com/buluma/ansible-role-bitbucket/blob/master/molecule/default/prepare.yml):
 
 ```yaml
-- become: true
-  gather_facts: false
-  hosts: all
-  name: Prepare
-  roles:
-  - name: buluma.bootstrap
-  - name: buluma.git
-  - name: buluma.java
-  - name: buluma.openjdk
+  - become: true
+    gather_facts: false
+    hosts: all
+    name: Prepare
+    roles:
+      - name: buluma.bootstrap
+      - name: buluma.git
+      - name: buluma.java
+      - name: buluma.openjdk
 ```
 
 Also see a [full explanation and example](https://buluma.github.io/how-to-use-these-roles.html) on how to use these roles.
@@ -43,18 +43,18 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 bitbucket_autologin_cookie_age: '10080'
 bitbucket_catalina: /opt/atlassian/bitbucket
 bitbucket_catalina_connector_port: '7990'
-bitbucket_catalina_connector_proxyname: null
-bitbucket_catalina_connector_proxyport: null
-bitbucket_catalina_connector_scheme: null
-bitbucket_catalina_connector_secure: null
-bitbucket_catalina_context_path: null
+bitbucket_catalina_connector_proxyname:
+bitbucket_catalina_connector_proxyport:
+bitbucket_catalina_connector_scheme:
+bitbucket_catalina_connector_secure:
+bitbucket_catalina_context_path:
 bitbucket_group: bitbucket
 bitbucket_home: /var/atlassian/application-data/bitbucket
 bitbucket_jvm_maximum_memory: 2048m
 bitbucket_jvm_minimum_memory: 2048m
 bitbucket_jvm_reserved_code_cache_size: 512m
-bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300 -XX:+IgnoreUnrecognizedVMOptions
-  -XX:+UnlockExperimentalVMOptions
+bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300 
+  -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockExperimentalVMOptions
 bitbucket_owner: bitbucket
 bitbucket_release: '8.19'
 bitbucket_session_timeout: '120'

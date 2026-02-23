@@ -1,9 +1,9 @@
-- become: true
-  gather_facts: false
-  hosts: all
-  name: Prepare
-  roles:
-  - name: buluma.bootstrap
-  - name: buluma.git
-  - name: buluma.java
-  - name: buluma.openjdk
+  - become: true
+    gather_facts: false
+    hosts: all
+    name: Prepare
+    roles:
+      - name: buluma.bootstrap
+      - name: buluma.git
+      - name: buluma.java
+      - name: buluma.openjdk

@@ -1,3 +1,3 @@
 _yum:
-- name: fontconfig
-  state: latest
+  - name: fontconfig
+    state: latest
