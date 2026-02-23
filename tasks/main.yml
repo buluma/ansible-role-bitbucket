@@ -1,175 +1,173 @@
 ---
-  - ansible.builtin.include_vars: ../vars/main.yml
-    name: Include default variables
-  - ansible.builtin.include_vars: '{{ _loop_var }}'
-    loop: '{{ query(''first_found'', _params) }}'
-    loop_control:
-      loop_var: _loop_var
-    name: Include release specific variables
-    vars:
-      _params:
-        files:
-          - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version |
-            lower }}.yml'
-          - '{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
-            | lower }}.yml'
-          - '{{ ansible_distribution | lower }}.yml'
-          - '{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower
-            }}.yml'
-          - '{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version
-            | lower }}.yml'
-          - '{{ ansible_os_family | lower }}.yml'
-        paths:
-          - ../vars
-        skip: true
-  - ansible.builtin.include_tasks: '{{ _loop_var }}'
-    loop: '{{ query(''first_found'', _params) }}'
-    loop_control:
-      loop_var: _loop_var
-    name: Include release specific tasks
-    vars:
-      _params:
-        files:
-          - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version |
-            lower }}.yml'
-          - '{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
-            | lower }}.yml'
-          - '{{ ansible_distribution | lower }}.yml'
-          - '{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower
-            }}.yml'
-          - '{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version
-            | lower }}.yml'
-          - '{{ ansible_os_family | lower }}.yml'
-        paths:
-          - .
-        skip: true
-  - ansible.builtin.group:
-      name: '{{ bitbucket_group }}'
-      state: present
-      system: true
-    name: Groupadd
-  - ansible.builtin.user:
-      create_home: false
-      group: '{{ bitbucket_group }}'
-      home: '{{ bitbucket_home }}'
-      name: '{{ bitbucket_owner }}'
-      shell: /bin/bash
-      state: present
-      system: true
-    name: Useradd
-  - ansible.builtin.file:
-      dest: '{{ item.dest }}'
-      group: '{{ item.group | default(''root'') }}'
-      mode: '{{ item.mode | default(''0755'') }}'
-      owner: '{{ item.owner | default(''root'') }}'
-      state: '{{ item.state | default(''directory'') }}'
-    loop:
-      - dest: /etc/systemd/system
-      - dest: '{{ bitbucket_catalina }}'
-        group: '{{ bitbucket_group }}'
-        mode: '0700'
-        owner: '{{ bitbucket_owner }}'
-      - dest: '{{ bitbucket_catalina }}/bin'
-        group: '{{ bitbucket_group }}'
-        owner: '{{ bitbucket_owner }}'
-      - dest: '{{ bitbucket_home }}'
-        group: '{{ bitbucket_group }}'
-        owner: '{{ bitbucket_owner }}'
-      - dest: '{{ bitbucket_home }}/shared'
-        group: '{{ bitbucket_group }}'
-        mode: '0750'
-        owner: '{{ bitbucket_owner }}'
-    name: Prepare directories
-  - ansible.builtin.template:
-      dest: '{{ item.dest }}'
-      group: '{{ item.group | default(''root'') }}'
-      mode: '{{ item.mode | default(''0644'') }}'
-      owner: '{{ item.owner | default(''root'') }}'
-      src: '{{ item.src | default(''./templates'' + item.dest + ''.j2'') }}'
-    loop:
-      - dest: /etc/systemd/system/bitbucket.service
-      - dest: '{{ bitbucket_catalina }}/bin/_start-webapp.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-        src: ./templates/opt/atlassian/bitbucket/bin/_start-webapp.sh.j2
-      - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-home.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-        src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-home.sh.j2
-      - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-user.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-        src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-user.sh.j2
-    name: Copy templates
-    notify:
-      - Systemctl daemon-reload
-      - Systemctl restart bitbucket.service
-  - ansible.builtin.file:
-      dest: '{{ item.dest }}'
-      group: '{{ item.group | default(''root'') }}'
-      mode: '{{ item.mode | default(''0644'') }}'
-      owner: '{{ item.owner | default(''root'') }}'
-      state: '{{ item.state | default(''file'') }}'
-    loop:
-      - dest: /etc/systemd/system/bitbucket.service
-      - dest: '{{ bitbucket_catalina }}/bin/_start-webapp.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-      - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-home.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-      - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-user.sh'
-        group: '{{ bitbucket_group }}'
-        mode: '0755'
-        owner: '{{ bitbucket_owner }}'
-    name: Prepare files
-    notify:
-      - Systemctl daemon-reload
-      - Systemctl restart bitbucket.service
-  - community.general.ini_file:
-      group: '{{ bitbucket_group }}'
-      mode: '0644'
-      no_extra_spaces: true
-      option: '{{ item.option }}'
-      owner: '{{ bitbucket_owner }}'
-      path: '{{ bitbucket_home }}/shared/bitbucket.properties'
-      section: ''
-      state: '{{ item.value | ternary(''present'', ''absent'') }}'
-      value: '{{ item.value }}'
-    loop:
-      - option: server.port
-        value: '{{ bitbucket_catalina_connector_port }}'
-      - option: server.scheme
-        value: '{{ bitbucket_catalina_connector_scheme }}'
-      - option: server.secure
-        value: '{{ bitbucket_catalina_connector_secure }}'
-      - option: server.proxy-name
-        value: '{{ bitbucket_catalina_connector_proxyname }}'
-      - option: server.proxy-port
-        value: '{{ bitbucket_catalina_connector_proxyport }}'
-      - option: server.context-path
-        value: '{{ bitbucket_catalina_context_path }}'
-      - option: server.session.timeout
-        value: '{{ (bitbucket_session_timeout | int) * 60 }}'
-      - option: auth.remember-me.enabled
-        value: optional
-      - option: auth.remember-me.token.expiry
-        value: '{{ ((bitbucket_autologin_cookie_age | int) / 60 / 24) | int }}'
-    name: Patch 
-      /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
-    notify:
-      - Systemctl restart bitbucket.service
-  - ansible.builtin.meta: flush_handlers
-    name: Flush handlers
-  - ansible.builtin.service:
-      enabled: true
-      name: bitbucket.service
-      state: started
-    changed_when: false
-    failed_when: false
-    name: Systemctl start bitbucket.service
+- ansible.builtin.include_vars: ../vars/main.yml
+  name: Include default variables
+- ansible.builtin.include_vars: '{{ _loop_var }}'
+  loop: '{{ query(''first_found'', _params) }}'
+  loop_control:
+    loop_var: _loop_var
+  name: Include release specific variables
+  vars:
+    _params:
+      files:
+      - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower
+        }}.yml'
+      - '{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
+        | lower }}.yml'
+      - '{{ ansible_distribution | lower }}.yml'
+      - '{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower }}.yml'
+      - '{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower
+        }}.yml'
+      - '{{ ansible_os_family | lower }}.yml'
+      paths:
+      - ../vars
+      skip: true
+- ansible.builtin.include_tasks: '{{ _loop_var }}'
+  loop: '{{ query(''first_found'', _params) }}'
+  loop_control:
+    loop_var: _loop_var
+  name: Include release specific tasks
+  vars:
+    _params:
+      files:
+      - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower
+        }}.yml'
+      - '{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
+        | lower }}.yml'
+      - '{{ ansible_distribution | lower }}.yml'
+      - '{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower }}.yml'
+      - '{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower
+        }}.yml'
+      - '{{ ansible_os_family | lower }}.yml'
+      paths:
+      - .
+      skip: true
+- ansible.builtin.group:
+    name: '{{ bitbucket_group }}'
+    state: present
+    system: true
+  name: Groupadd
+- ansible.builtin.user:
+    create_home: false
+    group: '{{ bitbucket_group }}'
+    home: '{{ bitbucket_home }}'
+    name: '{{ bitbucket_owner }}'
+    shell: /bin/bash
+    state: present
+    system: true
+  name: Useradd
+- ansible.builtin.file:
+    dest: '{{ item.dest }}'
+    group: '{{ item.group | default(''root'') }}'
+    mode: '{{ item.mode | default(''0755'') }}'
+    owner: '{{ item.owner | default(''root'') }}'
+    state: '{{ item.state | default(''directory'') }}'
+  loop:
+  - dest: /etc/systemd/system
+  - dest: '{{ bitbucket_catalina }}'
+    group: '{{ bitbucket_group }}'
+    mode: '0700'
+    owner: '{{ bitbucket_owner }}'
+  - dest: '{{ bitbucket_catalina }}/bin'
+    group: '{{ bitbucket_group }}'
+    owner: '{{ bitbucket_owner }}'
+  - dest: '{{ bitbucket_home }}'
+    group: '{{ bitbucket_group }}'
+    owner: '{{ bitbucket_owner }}'
+  - dest: '{{ bitbucket_home }}/shared'
+    group: '{{ bitbucket_group }}'
+    mode: '0750'
+    owner: '{{ bitbucket_owner }}'
+  name: Prepare directories
+- ansible.builtin.template:
+    dest: '{{ item.dest }}'
+    group: '{{ item.group | default(''root'') }}'
+    mode: '{{ item.mode | default(''0644'') }}'
+    owner: '{{ item.owner | default(''root'') }}'
+    src: '{{ item.src | default(''./templates'' + item.dest + ''.j2'') }}'
+  loop:
+  - dest: /etc/systemd/system/bitbucket.service
+  - dest: '{{ bitbucket_catalina }}/bin/_start-webapp.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+    src: ./templates/opt/atlassian/bitbucket/bin/_start-webapp.sh.j2
+  - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-home.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+    src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-home.sh.j2
+  - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-user.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+    src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-user.sh.j2
+  name: Copy templates
+  notify:
+  - Systemctl daemon-reload
+  - Systemctl restart bitbucket.service
+- ansible.builtin.file:
+    dest: '{{ item.dest }}'
+    group: '{{ item.group | default(''root'') }}'
+    mode: '{{ item.mode | default(''0644'') }}'
+    owner: '{{ item.owner | default(''root'') }}'
+    state: '{{ item.state | default(''file'') }}'
+  loop:
+  - dest: /etc/systemd/system/bitbucket.service
+  - dest: '{{ bitbucket_catalina }}/bin/_start-webapp.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+  - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-home.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+  - dest: '{{ bitbucket_catalina }}/bin/set-bitbucket-user.sh'
+    group: '{{ bitbucket_group }}'
+    mode: '0755'
+    owner: '{{ bitbucket_owner }}'
+  name: Prepare files
+  notify:
+  - Systemctl daemon-reload
+  - Systemctl restart bitbucket.service
+- community.general.ini_file:
+    group: '{{ bitbucket_group }}'
+    mode: '0644'
+    no_extra_spaces: true
+    option: '{{ item.option }}'
+    owner: '{{ bitbucket_owner }}'
+    path: '{{ bitbucket_home }}/shared/bitbucket.properties'
+    section: ''
+    state: '{{ item.value | ternary(''present'', ''absent'') }}'
+    value: '{{ item.value }}'
+  loop:
+  - option: server.port
+    value: '{{ bitbucket_catalina_connector_port }}'
+  - option: server.scheme
+    value: '{{ bitbucket_catalina_connector_scheme }}'
+  - option: server.secure
+    value: '{{ bitbucket_catalina_connector_secure }}'
+  - option: server.proxy-name
+    value: '{{ bitbucket_catalina_connector_proxyname }}'
+  - option: server.proxy-port
+    value: '{{ bitbucket_catalina_connector_proxyport }}'
+  - option: server.context-path
+    value: '{{ bitbucket_catalina_context_path }}'
+  - option: server.session.timeout
+    value: '{{ (bitbucket_session_timeout | int) * 60 }}'
+  - option: auth.remember-me.enabled
+    value: optional
+  - option: auth.remember-me.token.expiry
+    value: '{{ ((bitbucket_autologin_cookie_age | int) / 60 / 24) | int }}'
+  name: Patch 
+    /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
+  notify:
+  - Systemctl restart bitbucket.service
+- ansible.builtin.meta: flush_handlers
+  name: Flush handlers
+- ansible.builtin.service:
+    enabled: true
+    name: bitbucket.service
+    state: started
+  changed_when: false
+  failed_when: false
+  name: Systemctl start bitbucket.service

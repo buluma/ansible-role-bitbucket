@@ -1,53 +1,53 @@
 ---
-  - ansible.builtin.rpm_key:
-      fingerprint: '{{ item.fingerprint }}'
-      key: '{{ item.key }}'
-      state: '{{ item.state }}'
-    loop: '{{ _rpm_key }}'
-    name: suse | Rpm --import
-    register: result
-    until: result is succeeded
-    vars:
-      ansible_python_interpreter: python3
-  - ansible.builtin.yum_repository:
-      baseurl: '{{ item.baseurl }}'
-      description: '{{ item.description }}'
-      enabled: '{{ item.enabled }}'
-      file: '{{ item.file }}'
-      gpgcheck: '{{ item.gpgcheck }}'
-      gpgkey: '{{ item.gpgkey }}'
-      module_hotfixes: '{{ item.module_hotfixes }}'
-      name: '{{ item.name }}'
-      priority: '{{ item.priority }}'
-      reposdir: '{{ item.reposdir | default(''/etc/zypp/repos.d'') }}'
-      state: '{{ item.state }}'
-    loop: '{{ _yum_repository }}'
-    name: suse | Yum-config-manager --add-repo
-  - ansible.builtin.command:
-      cmd: zypper removelock {{ item.name | 
-        regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
-    changed_when: false
-    failed_when: false
-    loop: '{{ _zypper }}'
-    name: suse | Zypper removelock
-    when: item.state == "present"
-  - community.general.zypper:
-      force_resolution: true
-      name: '{{ item.name }}'
-      state: '{{ item.state }}'
-    loop: '{{ _zypper }}'
-    name: suse | Zypper install
-    notify:
-      - Systemctl restart bitbucket.service
-    register: result
-    until: result is succeeded
-    vars:
-      ansible_python_interpreter: python3
-  - ansible.builtin.command:
-      cmd: zypper addlock {{ item.name | 
-        regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
-    changed_when: false
-    failed_when: false
-    loop: '{{ _zypper }}'
-    name: suse | Zypper addlock
-    when: item.state == "present"
+- ansible.builtin.rpm_key:
+    fingerprint: '{{ item.fingerprint }}'
+    key: '{{ item.key }}'
+    state: '{{ item.state }}'
+  loop: '{{ _rpm_key }}'
+  name: suse | Rpm --import
+  register: result
+  until: result is succeeded
+  vars:
+    ansible_python_interpreter: python3
+- ansible.builtin.yum_repository:
+    baseurl: '{{ item.baseurl }}'
+    description: '{{ item.description }}'
+    enabled: '{{ item.enabled }}'
+    file: '{{ item.file }}'
+    gpgcheck: '{{ item.gpgcheck }}'
+    gpgkey: '{{ item.gpgkey }}'
+    module_hotfixes: '{{ item.module_hotfixes }}'
+    name: '{{ item.name }}'
+    priority: '{{ item.priority }}'
+    reposdir: '{{ item.reposdir | default(''/etc/zypp/repos.d'') }}'
+    state: '{{ item.state }}'
+  loop: '{{ _yum_repository }}'
+  name: suse | Yum-config-manager --add-repo
+- ansible.builtin.command:
+    cmd: zypper removelock {{ item.name | 
+      regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
+  changed_when: false
+  failed_when: false
+  loop: '{{ _zypper }}'
+  name: suse | Zypper removelock
+  when: item.state == "present"
+- community.general.zypper:
+    force_resolution: true
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  loop: '{{ _zypper }}'
+  name: suse | Zypper install
+  notify:
+  - Systemctl restart bitbucket.service
+  register: result
+  until: result is succeeded
+  vars:
+    ansible_python_interpreter: python3
+- ansible.builtin.command:
+    cmd: zypper addlock {{ item.name | 
+      regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
+  changed_when: false
+  failed_when: false
+  loop: '{{ _zypper }}'
+  name: suse | Zypper addlock
+  when: item.state == "present"

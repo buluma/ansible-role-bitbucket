@@ -1,33 +1,33 @@
 ---
-  - become: true
-    gather_facts: true
-    hosts: all
-    name: Verify
-    remote_user: root
-    tasks:
-      - ansible.builtin.wait_for:
-          delay: 10
-          port: 7990
-          timeout: 300
-        async: 300
-        name: Check port
-        poll: 10
-        register: result
-        retries: 30
-        until: result is succeeded
-      - ansible.builtin.uri:
-          return_content: true
-          status_code: 200
-          timeout: 300
-          url: http://localhost:7990
-        async: 300
-        name: Check page
-        poll: 10
-        register: result
-        retries: 30
-        until: result.status == 200
-        when: ansible_facts['os_family'] == 'Debian'
-      - ansible.builtin.fail:
-        name: Check result
-        when: '''bitbucket'' not in result.content and ansible_facts[''os_family'']
-          == ''Debian'
+- become: true
+  gather_facts: true
+  hosts: all
+  name: Verify
+  remote_user: root
+  tasks:
+  - ansible.builtin.wait_for:
+      delay: 10
+      port: 7990
+      timeout: 300
+    async: 300
+    name: Check port
+    poll: 10
+    register: result
+    retries: 30
+    until: result is succeeded
+  - ansible.builtin.uri:
+      return_content: true
+      status_code: 200
+      timeout: 300
+      url: http://localhost:7990
+    async: 300
+    name: Check page
+    poll: 10
+    register: result
+    retries: 30
+    until: result.status == 200
+    when: ansible_facts['os_family'] == 'Debian'
+  - ansible.builtin.fail:
+    name: Check result
+    when: '''bitbucket'' not in result.content and ansible_facts[''os_family''] ==
+      ''Debian'
