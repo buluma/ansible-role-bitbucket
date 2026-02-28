@@ -1,19 +1,19 @@
 ---
 - ansible.builtin.apt_key:
-    id: '{{ item.id }}'
-    keyring: '{{ item.keyring }}'
-    state: '{{ item.state }}'
-    url: '{{ item.url }}'
-  loop: '{{ _apt_key }}'
+    id: "{{ item.id }}"
+    keyring: "{{ item.keyring }}"
+    state: "{{ item.state }}"
+    url: "{{ item.url }}"
+  loop: "{{ _apt_key }}"
   name: debian | Apt-key add
   register: result
   until: result is succeeded
 - ansible.builtin.apt_repository:
-    filename: '{{ item.filename }}'
-    mode: '{{ item.mode | default(''0644'') }}'
-    repo: '{{ item.repo }}'
-    state: '{{ item.state }}'
-  loop: '{{ _apt_repository }}'
+    filename: "{{ item.filename }}"
+    mode: "{{ item.mode | default('0644') }}"
+    repo: "{{ item.repo }}"
+    state: "{{ item.state }}"
+  loop: "{{ _apt_repository }}"
   name: debian | Apt-add-repository
   register: result
   until: result is succeeded
@@ -22,16 +22,16 @@
     selection: install
   changed_when: false
   failed_when: false
-  loop: '{{ _apt }}'
+  loop: "{{ _apt }}"
   name: debian | Apt-mark unhold
   when: item.state == "present"
 - ansible.builtin.apt:
-    name: '{{ item.name }}'
-    state: '{{ item.state }}'
-  loop: '{{ _apt }}'
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop: "{{ _apt }}"
   name: debian | Apt-get install
   notify:
-  - Systemctl restart bitbucket.service
+    - Systemctl restart bitbucket.service
   register: result
   until: result is succeeded
 - ansible.builtin.dpkg_selections:
@@ -39,6 +39,6 @@
     selection: hold
   changed_when: false
   failed_when: false
-  loop: '{{ _apt }}'
+  loop: "{{ _apt }}"
   name: debian | Apt-mark hold
   when: item.state == "present"

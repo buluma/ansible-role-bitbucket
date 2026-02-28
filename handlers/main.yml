@@ -9,8 +9,8 @@
     name: bitbucket.service
     state: restarted
   changed_when: false
-  delegate_to: '{{ item }}'
+  delegate_to: "{{ item }}"
   failed_when: false
-  loop: '{{ ansible_play_hosts }}'
+  loop: "{{ ansible_play_hosts }}"
   name: Systemctl restart bitbucket.service
   run_once: true
