@@ -158,8 +158,7 @@
       value: optional
     - option: auth.remember-me.token.expiry
       value: "{{ ((bitbucket_autologin_cookie_age | int) / 60 / 24) | int }}"
-  name: Patch
-    /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
+  name: Patch /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
   notify:
     - Systemctl restart bitbucket.service
 - ansible.builtin.meta: flush_handlers
