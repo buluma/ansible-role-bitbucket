@@ -1,3 +1,21 @@
 ---
+_rpm_key:
+  - fingerprint: 789CFFDE0295B8A1F4E5690C4BECC97550D0B1FD
+    key: http://downloadcontent.opensuse.org/repositories/home:/alvistack/openSUSE_Tumbleweed/repodata/repomd.xml.key
+    state: present
+_yum_repository:
+  - baseurl: http://downloadcontent.opensuse.org/repositories/home:/alvistack/openSUSE_Tumbleweed
+    description: home:alvistack (openSUSE_Tumbleweed)
+    enabled: true
+    file: home_alvistack
+    gpgcheck: true
+    gpgkey: http://downloadcontent.opensuse.org/repositories/home:/alvistack/openSUSE_Tumbleweed/repodata/repomd.xml.key
+    module_hotfixes: true
+    name: home_alvistack
+    priority: "2"
+    state: present
 _zypper:
-  - { state: "latest", name: "fontconfig" }
+  - name: atlassian-bitbucket-100:{{ bitbucket_version }}
+    state: present
+  - name: fontconfig
+    state: latest

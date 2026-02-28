@@ -8,10 +8,10 @@ _apt_key:
   - id: 789CFFDE0295B8A1F4E5690C4BECC97550D0B1FD
     keyring: /etc/apt/trusted.gpg.d/home_alvistack.gpg
     state: present
-    url: http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/Release.key
+    url: http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_23.10/Release.key
 _apt_repository:
   - filename: home:alvistack
     repo: deb
-      http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/
+      http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_23.10/
       /
     state: present

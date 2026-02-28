@@ -1,7 +1,7 @@
 ---
 _rpm_key:
   - fingerprint: 789CFFDE0295B8A1F4E5690C4BECC97550D0B1FD
-    key: http://downloadcontent.opensuse.org/repositories/home:/alvistack/CentOS_7/repodata/repomd.xml.key
+    key: http://downloadcontent.opensuse.org/repositories/home:/alvistack/Fedora_39/repodata/repomd.xml.key
     state: present
 _yum:
   - name: atlassian-bitbucket-100:{{ bitbucket_version }}*
@@ -9,12 +9,12 @@ _yum:
   - name: fontconfig
     state: latest
 _yum_repository:
-  - baseurl: http://downloadcontent.opensuse.org/repositories/home:/alvistack/CentOS_7
-    description: home:alvistack (CentOS_7)
+  - baseurl: http://downloadcontent.opensuse.org/repositories/home:/alvistack/Fedora_39
+    description: home:alvistack (Fedora_39)
     enabled: true
     file: home:alvistack
     gpgcheck: true
-    gpgkey: http://downloadcontent.opensuse.org/repositories/home:/alvistack/CentOS_7/repodata/repomd.xml.key
+    gpgkey: http://downloadcontent.opensuse.org/repositories/home:/alvistack/Fedora_39/repodata/repomd.xml.key
     module_hotfixes: true
     name: home_alvistack
     priority: "2"

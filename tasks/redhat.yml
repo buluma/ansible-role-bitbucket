@@ -1,9 +1,47 @@
 ---
-
-- name: redhat | Yum install
-  ansible.builtin.yum:
+- ansible.builtin.rpm_key:
+    fingerprint: "{{ item.fingerprint }}"
+    key: "{{ item.key }}"
+    state: "{{ item.state }}"
+  loop: "{{ _rpm_key }}"
+  name: redhat | Rpm --import
+  register: result
+  until: result is succeeded
+- ansible.builtin.yum_repository:
+    baseurl: "{{ item.baseurl }}"
+    description: "{{ item.description }}"
+    enabled: "{{ item.enabled }}"
+    file: "{{ item.file }}"
+    gpgcheck: "{{ item.gpgcheck }}"
+    gpgkey: "{{ item.gpgkey }}"
+    module_hotfixes: "{{ item.module_hotfixes }}"
+    name: "{{ item.name }}"
+    priority: "{{ item.priority }}"
+    state: "{{ item.state }}"
+  loop: "{{ _yum_repository }}"
+  name: redhat | Yum-config-manager --add-repo
+- changed_when: false
+  community.general.yum_versionlock:
+    name: '{{ item.name | regex_replace(''^(.*)-[0-9]*:*[0-9]+\..*$'', ''\1-*'') }}'
+    state: absent
+  failed_when: false
+  loop: "{{ _yum }}"
+  name: redhat | Yum versionlock delete
+  when: item.state == "present"
+- ansible.builtin.dnf:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   loop: "{{ _yum }}"
+  name: redhat | DNF install
+  notify:
+    - Systemctl restart bitbucket.service
   register: result
   until: result is succeeded
+- changed_when: false
+  community.general.yum_versionlock:
+    name: '{{ item.name | regex_replace(''^(.*)-[0-9]*:*[0-9]+\..*$'', ''\1-*'') }}'
+    state: present
+  failed_when: false
+  loop: "{{ _yum }}"
+  name: redhat | Yum versionlock add
+  when: item.state == "present"
