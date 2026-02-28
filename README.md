@@ -43,9 +43,9 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 
 ```yaml
 ---
-bitbucket_autologin_cookie_age: '10080'
+bitbucket_autologin_cookie_age: "10080"
 bitbucket_catalina: /opt/atlassian/bitbucket
-bitbucket_catalina_connector_port: '7990'
+bitbucket_catalina_connector_port: "7990"
 bitbucket_catalina_connector_proxyname:
 bitbucket_catalina_connector_proxyport:
 bitbucket_catalina_connector_scheme:
@@ -56,12 +56,12 @@ bitbucket_home: /var/atlassian/application-data/bitbucket
 bitbucket_jvm_maximum_memory: 2048m
 bitbucket_jvm_minimum_memory: 2048m
 bitbucket_jvm_reserved_code_cache_size: 512m
-bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300 
+bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300
   -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockExperimentalVMOptions
 bitbucket_owner: bitbucket
-bitbucket_release: '8.19'
-bitbucket_session_timeout: '120'
-bitbucket_version: '{{ _bitbucket_version[bitbucket_release] }}'
+bitbucket_release: "8.19"
+bitbucket_session_timeout: "120"
+bitbucket_version: "{{ _bitbucket_version[bitbucket_release] }}"
 ```
 
 ## [Requirements](#requirements)
