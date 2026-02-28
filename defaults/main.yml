@@ -12,8 +12,7 @@ bitbucket_home: /var/atlassian/application-data/bitbucket
 bitbucket_jvm_maximum_memory: 2048m
 bitbucket_jvm_minimum_memory: 2048m
 bitbucket_jvm_reserved_code_cache_size: 512m
-bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300
-  -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockExperimentalVMOptions
+bitbucket_jvm_support_recommended_args: -Datlassian.plugins.enable.wait=300 -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockExperimentalVMOptions
 bitbucket_owner: bitbucket
 bitbucket_release: "8.19"
 bitbucket_session_timeout: "120"

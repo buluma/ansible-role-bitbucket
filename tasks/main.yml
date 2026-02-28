@@ -1,52 +1,47 @@
 ---
-- ansible.builtin.include_vars: ../vars/main.yml
-  name: Include default variables
-- ansible.builtin.include_vars: "{{ _loop_var }}"
+- name: Include default variables
+  ansible.builtin.include_vars: ../vars/main.yml
+- name: Include release specific variables
+  ansible.builtin.include_vars: "{{ _loop_var }}"
   loop: "{{ query('first_found', _params) }}"
   loop_control:
     loop_var: _loop_var
-  name: Include release specific variables
   vars:
     _params:
       files:
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower
-          }}.yml"
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
-          | lower }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower }}.yml"
-        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower
-          }}.yml"
+        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
       paths:
         - ../vars
       skip: true
-- ansible.builtin.include_tasks: "{{ _loop_var }}"
+- name: Include release specific tasks
+  ansible.builtin.include_tasks: "{{ _loop_var }}"
   loop: "{{ query('first_found', _params) }}"
   loop_control:
     loop_var: _loop_var
-  name: Include release specific tasks
   vars:
     _params:
       files:
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower
-          }}.yml"
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version
-          | lower }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower }}.yml"
-        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower
-          }}.yml"
+        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
       paths:
         - .
       skip: true
-- ansible.builtin.group:
+- name: Groupadd
+  ansible.builtin.group:
     name: "{{ bitbucket_group }}"
     state: present
     system: true
-  name: Groupadd
-- ansible.builtin.user:
+- name: Useradd
+  ansible.builtin.user:
     create_home: false
     group: "{{ bitbucket_group }}"
     home: "{{ bitbucket_home }}"
@@ -54,8 +49,8 @@
     shell: /bin/bash
     state: present
     system: true
-  name: Useradd
-- ansible.builtin.file:
+- name: Prepare directories
+  ansible.builtin.file:
     dest: "{{ item.dest }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0755') }}"
@@ -77,8 +72,8 @@
       group: "{{ bitbucket_group }}"
       mode: "0750"
       owner: "{{ bitbucket_owner }}"
-  name: Prepare directories
-- ansible.builtin.template:
+- name: Copy templates
+  ansible.builtin.template:
     dest: "{{ item.dest }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0644') }}"
@@ -101,11 +96,11 @@
       mode: "0755"
       owner: "{{ bitbucket_owner }}"
       src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-user.sh.j2
-  name: Copy templates
   notify:
     - Systemctl daemon-reload
     - Systemctl restart bitbucket.service
-- ansible.builtin.file:
+- name: Prepare files
+  ansible.builtin.file:
     dest: "{{ item.dest }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0644') }}"
@@ -125,11 +120,11 @@
       group: "{{ bitbucket_group }}"
       mode: "0755"
       owner: "{{ bitbucket_owner }}"
-  name: Prepare files
   notify:
     - Systemctl daemon-reload
     - Systemctl restart bitbucket.service
-- community.general.ini_file:
+- name: Patch /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
+  community.general.ini_file:
     group: "{{ bitbucket_group }}"
     mode: "0644"
     no_extra_spaces: true
@@ -158,15 +153,14 @@
       value: optional
     - option: auth.remember-me.token.expiry
       value: "{{ ((bitbucket_autologin_cookie_age | int) / 60 / 24) | int }}"
-  name: Patch /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
   notify:
     - Systemctl restart bitbucket.service
-- ansible.builtin.meta: flush_handlers
-  name: Flush handlers
-- ansible.builtin.service:
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+- name: Systemctl start bitbucket.service
+  ansible.builtin.service:
     enabled: true
     name: bitbucket.service
     state: started
   changed_when: false
   failed_when: false
-  name: Systemctl start bitbucket.service

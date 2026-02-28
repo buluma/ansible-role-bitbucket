@@ -11,7 +11,5 @@ _apt_key:
     url: http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/Release.key
 _apt_repository:
   - filename: home:alvistack
-    repo: deb
-      http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/
-      /
+    repo: deb http://downloadcontent.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/ /
     state: present
