@@ -96,9 +96,8 @@
       mode: "0755"
       owner: "{{ bitbucket_owner }}"
       src: ./templates/opt/atlassian/bitbucket/bin/set-bitbucket-user.sh.j2
-  notify:
-    - Systemctl daemon-reload
-    - Systemctl restart bitbucket.service
+  notify: [Systemctl daemon-reload, Systemctl restart bitbucket.service]
+  # Separator for the pre-commit handler parser.
 - name: Prepare files
   ansible.builtin.file:
     dest: "{{ item.dest }}"
@@ -120,9 +119,8 @@
       group: "{{ bitbucket_group }}"
       mode: "0755"
       owner: "{{ bitbucket_owner }}"
-  notify:
-    - Systemctl daemon-reload
-    - Systemctl restart bitbucket.service
+  notify: [Systemctl daemon-reload, Systemctl restart bitbucket.service]
+  # Separator for the pre-commit handler parser.
 - name: Patch /var/atlassian/application-data/bitbucket/shared/bitbucket.properties
   community.general.ini_file:
     group: "{{ bitbucket_group }}"
@@ -153,8 +151,8 @@
       value: optional
     - option: auth.remember-me.token.expiry
       value: "{{ ((bitbucket_autologin_cookie_age | int) / 60 / 24) | int }}"
-  notify:
-    - Systemctl restart bitbucket.service
+  notify: Systemctl restart bitbucket.service
+  # Separator for the pre-commit handler parser.
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 - name: Systemctl start bitbucket.service
