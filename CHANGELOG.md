@@ -1,12 +1,14 @@
 # Changelog
 
-## [Unreleased](https://github.com/buluma/ansible-role-bitbucket/tree/HEAD)
+## [v26.6.0](https://github.com/buluma/ansible-role-bitbucket/tree/v26.6.0) (2026-06-14)
 
-[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v24.2.26...HEAD)
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v24.2.26...v26.6.0)
 
 **Merged pull requests:**
 
+- Bump docker/setup-buildx-action from 3 to 4 [\#20](https://github.com/buluma/ansible-role-bitbucket/pull/20) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump actions/checkout from 4 to 6 [\#19](https://github.com/buluma/ansible-role-bitbucket/pull/19) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump release-drafter/release-drafter from 5 to 6 [\#17](https://github.com/buluma/ansible-role-bitbucket/pull/17) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump buluma/dependabot-auto-merge-action from 2.1.1 to 2.1.2 [\#15](https://github.com/buluma/ansible-role-bitbucket/pull/15) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v24.2.26](https://github.com/buluma/ansible-role-bitbucket/tree/v24.2.26) (2024-02-19)
