@@ -1,7 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
-  author: Michael Buluma
+  author: buluma
   company: ShadowNet
   description: Ansible Role for Atlassian Bitbucket Installation
   galaxy_tags:
