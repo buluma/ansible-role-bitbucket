@@ -17,7 +17,7 @@ jobs:
           channel: "#ansible"
           message: Starting buluma.bitbucket GitLab Trigger...
           status: starting
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLAB_HOSTNAME: gitlab.com
