@@ -5,22 +5,11 @@
   gather_facts: false
 
   pre_tasks:
-    - name: Bootstrap
-      ansible.builtin.import_role:
-        name: buluma.bootstrap
-    - name: Gather facts
-      ansible.builtin.setup:
-    - name: Install Java on Debian/Ubuntu
-      ansible.builtin.apt:
-        name: default-jdk
-        state: present
-        update_cache: true
-      when: ansible_facts['os_family'] == 'Debian'
-    - name: Install Java on RedHat/Fedora
-      ansible.builtin.package:
-        name: java-17-openjdk-headless
-        state: present
-      when: ansible_facts['os_family'] == 'RedHat'
+    - name: Install sudo if missing
+      ansible.builtin.raw: "{{ ansible_pkg_mgr | default('dnf') }} install -y sudo}"
+      become: false
+      changed_when: false
+      failed_when: false
 
   roles:
     - role: buluma.bootstrap
