@@ -72,6 +72,19 @@
       group: "{{ bitbucket_group }}"
       mode: "0750"
       owner: "{{ bitbucket_owner }}"
+- name: Find the active java binary
+  ansible.builtin.command: readlink -f /etc/alternatives/java
+  changed_when: false
+  register: _bitbucket_java_binary
+
+# vendor's set-jre-home.sh falls back to `which java` when JAVA_HOME/
+# JRE_HOME aren't set, but `which` isn't installed on every image (e.g.
+# almalinux10's minimal base) -- exporting JAVA_HOME on the unit itself
+# avoids that fallback path entirely.
+- name: Set bitbucket_java_home fact
+  ansible.builtin.set_fact:
+    bitbucket_java_home: "{{ _bitbucket_java_binary.stdout | dirname | dirname }}"
+
 - name: Copy templates
   ansible.builtin.template:
     dest: "{{ item.dest }}"
