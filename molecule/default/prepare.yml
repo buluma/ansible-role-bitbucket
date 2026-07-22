@@ -39,3 +39,4 @@
     - role: buluma.git
     - role: buluma.openjdk
     - role: buluma.java
+      java_version: 21
