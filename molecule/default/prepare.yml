@@ -37,3 +37,5 @@
     - role: buluma.bootstrap
     - role: buluma.epel
     - role: buluma.git
+    - role: buluma.openjdk
+    - role: buluma.java
