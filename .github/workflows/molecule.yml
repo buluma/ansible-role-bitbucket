@@ -54,10 +54,14 @@ jobs:
             tag: "almalinux9"
           - image: "docker-molecule-images"
             tag: "debian13"
-          - image: "docker-molecule-images"
-            tag: "debian12"
-          - image: "docker-molecule-images"
-            tag: "debian11"
+          # debian12/debian11 excluded: this atlassian-bitbucket package
+          # requires Java 21, which isn't available in either release's
+          # main repo without backports (not set up here).
+          # Manual override: meta/preferences.yml can't express this --
+          # generating a Debian versions list containing only "13" trips
+          # a bug in ansible-generator ("object of type 'dict' has no
+          # attribute '13'") -- so this will need to be re-applied if the
+          # workflow is regenerated.
           - image: "docker-molecule-images"
             tag: "fedora44"
           - image: "docker-molecule-images"
