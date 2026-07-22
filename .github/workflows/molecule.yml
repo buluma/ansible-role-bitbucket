@@ -63,10 +63,6 @@ jobs:
           # attribute '13'") -- so this will need to be re-applied if the
           # workflow is regenerated.
           - image: "docker-molecule-images"
-            tag: "fedora44"
-          - image: "docker-molecule-images"
-            tag: "fedora43"
-          - image: "docker-molecule-images"
             tag: "ubuntu2604"
           - image: "docker-molecule-images"
             tag: "ubuntu2404"

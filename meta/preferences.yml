@@ -16,12 +16,9 @@ platforms:
       # no attribute '13'"). Regenerating this role will silently
       # reintroduce debian11/12; reapply the override if that happens.
       - all
-  - name: Fedora
-    versions:
-      # Excludes 45: it ships Python 3.15.0b3, whose dataclasses module
-      # dropped _is_type, breaking ansible-core's AnsiballZ module wrapper.
-      - "44"
-      - "43"
+  # Fedora excluded entirely: this atlassian-bitbucket package requires
+  # Java 21, which Fedora 43/44 no longer ship (java-21-openjdk was
+  # dropped, same as noted in ansible-role-java's history).
   - name: Ubuntu
     versions:
       - all
