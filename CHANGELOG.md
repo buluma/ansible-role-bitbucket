@@ -6,6 +6,7 @@
 
 **Merged pull requests:**
 
+- fix: bump bitbucket 10.2.x pin to 10.2.6 [\#27](https://github.com/buluma/ansible-role-bitbucket/pull/27) ([buluma](https://github.com/buluma))
 - Bump release-drafter/release-drafter from 7 to 7.6.0 [\#25](https://github.com/buluma/ansible-role-bitbucket/pull/25) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v26.6.2](https://github.com/buluma/ansible-role-bitbucket/tree/v26.6.2) (2026-07-22)
