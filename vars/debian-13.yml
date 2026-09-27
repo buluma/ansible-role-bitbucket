@@ -1,6 +1,6 @@
 ---
 _apt:
-  - name: atlassian-bitbucket={{ bitbucket_version }}*
+  - name: atlassian-bitbucket=100:{{ bitbucket_version }}*
     state: present
   - name: fontconfig
     state: latest
