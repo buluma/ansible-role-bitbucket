@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased](https://github.com/buluma/ansible-role-bitbucket/tree/HEAD)
+
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.9.0...HEAD)
+
+**Merged pull requests:**
+
+- \[codex\] Match Bitbucket package repository versions [\#29](https://github.com/buluma/ansible-role-bitbucket/pull/29) ([buluma](https://github.com/buluma))
+
 ## [v26.9.0](https://github.com/buluma/ansible-role-bitbucket/tree/v26.9.0) (2026-09-06)
 
 [Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.6.2...v26.9.0)
