@@ -4,7 +4,7 @@ _rpm_key:
     key: http://download.opensuse.org/repositories/home:/alvistack/Fedora_38/repodata/repomd.xml.key
     state: present
 _yum:
-  - name: atlassian-bitbucket-100:{{ bitbucket_version }}*
+  - name: atlassian-bitbucket-{{ bitbucket_version }}*
     state: present
   - name: fontconfig
     state: latest

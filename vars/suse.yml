@@ -15,7 +15,7 @@ _yum_repository:
     priority: "2"
     state: present
 _zypper:
-  - name: atlassian-bitbucket-100:{{ bitbucket_version }}
+  - name: atlassian-bitbucket-{{ bitbucket_version }}
     state: present
   - name: fontconfig
     state: latest
