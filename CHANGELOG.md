@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/buluma/ansible-role-bitbucket/tree/HEAD)
 
-[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.9.0...HEAD)
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.10.0...HEAD)
+
+**Merged pull requests:**
+
+- Enable native Dependabot auto-merge with required CI [\#30](https://github.com/buluma/ansible-role-bitbucket/pull/30) ([buluma](https://github.com/buluma))
+
+## [v26.10.0](https://github.com/buluma/ansible-role-bitbucket/tree/v26.10.0) (2026-09-27)
+
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.9.0...v26.10.0)
 
 **Merged pull requests:**
 
