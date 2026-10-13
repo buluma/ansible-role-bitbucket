@@ -6,6 +6,7 @@
 
 **Merged pull requests:**
 
+- chore\(deps\): bump release-drafter/release-drafter from 7.9.0 to 7.10.0 [\#32](https://github.com/buluma/ansible-role-bitbucket/pull/32) ([dependabot[bot]](https://github.com/apps/dependabot))
 - chore\(deps\): bump release-drafter/release-drafter from 7.7.0 to 7.9.0 [\#31](https://github.com/buluma/ansible-role-bitbucket/pull/31) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v26.10.9](https://github.com/buluma/ansible-role-bitbucket/tree/v26.10.9) (2026-10-03)
