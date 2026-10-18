@@ -6,6 +6,7 @@
 
 **Merged pull requests:**
 
+- fix: bump Bitbucket 10.2 package to 10.2.8 [\#35](https://github.com/buluma/ansible-role-bitbucket/pull/35) ([buluma](https://github.com/buluma))
 - chore\(deps\): bump ansible/ansible-lint from 26.9.0 to 26.10.0 [\#33](https://github.com/buluma/ansible-role-bitbucket/pull/33) ([dependabot[bot]](https://github.com/apps/dependabot))
 - chore\(deps\): bump release-drafter/release-drafter from 7.9.0 to 7.10.0 [\#32](https://github.com/buluma/ansible-role-bitbucket/pull/32) ([dependabot[bot]](https://github.com/apps/dependabot))
 - chore\(deps\): bump release-drafter/release-drafter from 7.7.0 to 7.9.0 [\#31](https://github.com/buluma/ansible-role-bitbucket/pull/31) ([dependabot[bot]](https://github.com/apps/dependabot))
