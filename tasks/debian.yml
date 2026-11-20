@@ -17,7 +17,8 @@
   loop: "{{ _apt_repository }}"
 # item.repo is a one-line "deb [options] URI SUITE [COMPONENT...]" string,
 # split here into the parts deb822_repository needs.
-- name: debian | Apt-add-repository
+# The noqa is there because ansible-lint can't validate the templated types.
+- name: debian | Apt-add-repository  # noqa: args[module]
   ansible.builtin.deb822_repository:
     name: "{{ item.filename | regex_replace('[^A-Za-z0-9_-]+', '_') | trim('_') }}"
     mode: "{{ item.mode | default('0644') }}"
