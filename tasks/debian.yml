@@ -2,9 +2,12 @@
 - name: debian | Install required package python3-debian
   ansible.builtin.package:
     name: python3-debian
+- name: debian | Install required package gnupg
+  ansible.builtin.package:
+    name: gnupg
 # The keys and the one-line sources below were written by earlier versions
 # of this role. Remove them so upgrades don't leave duplicate sources. The keys
-# are now fetched by deb822_repository from the URL in _apt_key.
+# are now verified and installed by apt-key.yml.
 - name: debian | Remove legacy Apt keys
   ansible.builtin.file:
     path: "{{ item.keyring | regex_replace('\\.gpg$', '.asc') }}"
@@ -15,6 +18,22 @@
     path: "/etc/apt/sources.list.d/{{ item.filename }}.list"
     state: absent
   loop: "{{ _apt_repository }}"
+- name: debian | Create Apt keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+# The key of a repository is the entry of _apt_key at the same position. It is
+# checked against its listed id before it is installed, see apt-key.yml.
+- name: debian | Verify and install Apt keys
+  ansible.builtin.include_tasks: apt-key.yml
+  loop: "{{ _apt_key | zip(_apt_repository) | list }}"
+  loop_control:
+    loop_var: _bitbucket_apt_key
+    label: "{{ _bitbucket_apt_key[0].url }}"
+  when: _bitbucket_apt_key[0].state == 'present'
 # item.repo is a one-line "deb [options] URI SUITE [COMPONENT...]" string,
 # split here into the parts deb822_repository needs.
 # The noqa is there because ansible-lint can't validate the templated types.
@@ -35,8 +54,8 @@
     _bitbucket_apt_repository_options: "{{ _bitbucket_apt_repository_line | regex_search('\\[[^\\]]*\\]') | default('', true) }}"
     _bitbucket_apt_repository_arch_option: "{{ _bitbucket_apt_repository_options | regex_search('arch=([^\\s\\]]+)', '\\1') | default([''], true) | first }}"
     _bitbucket_apt_repository_arch: "{{ _bitbucket_apt_repository_arch_option | split(',') | reject('equalto', '') | list }}"
-    # Without a signed-by option the key is fetched from the URL in _apt_key.
-    _bitbucket_apt_repository_signed_by: "{{ _bitbucket_apt_repository_options | regex_search('signed-by=([^\\s\\]]+)', '\\1') | default([_apt_key[0].url], true) | first }}"
+    # Without a signed-by option the key is the one apt-key.yml verified and installed for this repository.
+    _bitbucket_apt_repository_signed_by: "{{ _bitbucket_apt_repository_options | regex_search('signed-by=([^\\s\\]]+)', '\\1') | default(['/etc/apt/keyrings/' ~ (item.filename | regex_replace('[^A-Za-z0-9_-]+', '_') | trim('_')) ~ '.asc'], true) | first }}"
     _bitbucket_apt_repository_rest: "{{ _bitbucket_apt_repository_line | regex_replace('^\\S+\\s+(\\[[^\\]]*\\]\\s+)?', '') | split() }}"
   loop: "{{ _apt_repository }}"
   register: result
