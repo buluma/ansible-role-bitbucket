@@ -19,6 +19,11 @@
             timeout: 30
             url: http://localhost:7990
           register: result
+          # The port opens before the web application has finished starting,
+          # and a start page without the word bitbucket is served until then.
+          until: result.content is defined and 'bitbucket' in result.content
+          retries: 30
+          delay: 10
           when: ansible_facts['os_family'] == 'Debian'
         - name: Check result
           ansible.builtin.fail:
