@@ -62,6 +62,38 @@
           ansible.builtin.debug:
             var: _diag_applog.stdout_lines
 
+        - name: Diagnostics | find Mesh log files
+          ansible.builtin.find:
+            paths: /var/atlassian/application-data/bitbucket
+            patterns: '*.log*'
+            file_type: file
+            recurse: true
+          register: _diag_mesh_files
+          failed_when: false
+
+        - name: Diagnostics | tail Mesh logs
+          ansible.builtin.command:
+            argv: "{{ ['tail', '-n', '120', '--'] + (_diag_mesh_files.files | map(attribute='path') | select('search', '(?i)mesh') | list) }}"
+          changed_when: false
+          failed_when: false
+          register: _diag_mesh
+          when: _diag_mesh_files.files | map(attribute='path') | select('search', '(?i)mesh') | list | length > 0
+
+        - name: Diagnostics | print Mesh logs
+          ansible.builtin.debug:
+            var: _diag_mesh.stdout_lines
+          when: _diag_mesh.stdout_lines is defined
+
+        - name: Diagnostics | read cgroup memory events
+          ansible.builtin.command: cat /sys/fs/cgroup/memory.events
+          changed_when: false
+          failed_when: false
+          register: _diag_memory
+
+        - name: Diagnostics | print cgroup memory events
+          ansible.builtin.debug:
+            var: _diag_memory.stdout_lines
+
         - name: Re-raise failure
           ansible.builtin.fail:
             msg: Bitbucket verify failed -- see diagnostics above
