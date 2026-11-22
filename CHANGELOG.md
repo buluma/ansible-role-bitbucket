@@ -6,6 +6,10 @@
 
 **Merged pull requests:**
 
+- ANS-70: Fix changelog workflow [\#41](https://github.com/buluma/ansible-role-bitbucket/pull/41) ([buluma](https://github.com/buluma))
+- ANS-39: Match the 0600 mode Bitbucket applies to bitbucket.properties [\#39](https://github.com/buluma/ansible-role-bitbucket/pull/39) ([buluma](https://github.com/buluma))
+- ANS-39: Migrate apt\_repository to deb822\_repository, set min\_ansible\_version to 2.19 [\#38](https://github.com/buluma/ansible-role-bitbucket/pull/38) ([buluma](https://github.com/buluma))
+- chore\(deps\): bump release-drafter/release-drafter from 7.10.0 to 7.11.0 [\#37](https://github.com/buluma/ansible-role-bitbucket/pull/37) ([dependabot[bot]](https://github.com/apps/dependabot))
 - chore\(deps\): bump ansible/ansible-lint from 26.10.1 to 26.11.0 [\#36](https://github.com/buluma/ansible-role-bitbucket/pull/36) ([dependabot[bot]](https://github.com/apps/dependabot))
 - fix: bump Bitbucket 10.2 package to 10.2.8 [\#35](https://github.com/buluma/ansible-role-bitbucket/pull/35) ([buluma](https://github.com/buluma))
 - chore\(deps\): bump ansible/ansible-lint from 26.10.0 to 26.10.1 [\#34](https://github.com/buluma/ansible-role-bitbucket/pull/34) ([dependabot[bot]](https://github.com/apps/dependabot))
