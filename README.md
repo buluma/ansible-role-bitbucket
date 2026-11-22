@@ -58,6 +58,88 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
       changed_when: false
       failed_when: false
 
+    - name: Gather platform facts
+      ansible.builtin.setup:
+
+    # Ubuntu 22.04 ships Git 2.34, but Bitbucket 10.2 requires Git 2.42 or newer.
+    - name: Install Git repository prerequisites on Ubuntu 22.04
+      ansible.builtin.apt:
+        name:
+          - gnupg
+          - python3-debian
+        state: present
+        update_cache: true
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Ensure apt keyrings directory exists on Ubuntu 22.04
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Verify the Git maintainers signing key on Ubuntu 22.04
+      ansible.builtin.include_tasks: ../../tasks/apt-key.yml
+      vars:
+        _bitbucket_apt_key:
+          - url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF911AB184317630C59970973E363C90F8F1B6217
+            id: F911AB184317630C59970973E363C90F8F1B6217
+          - filename: git-core-ppa
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Add Git maintainers PPA on Ubuntu 22.04
+      ansible.builtin.deb822_repository:
+        name: git-core-ppa
+        types: deb
+        uris: https://ppa.launchpadcontent.net/git-core/ppa/ubuntu
+        suites: jammy
+        components: main
+        signed_by: /etc/apt/keyrings/git-core-ppa.asc
+        state: present
+      register: _git_ppa
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Update apt cache for Git PPA on Ubuntu 22.04
+      ansible.builtin.apt:
+        update_cache: true
+      when:
+        - _git_ppa is changed
+
+    - name: Upgrade Git on Ubuntu 22.04
+      ansible.builtin.apt:
+        name: git
+        state: latest  # noqa: package-latest
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Read Git version on Ubuntu 22.04
+      ansible.builtin.command: git --version
+      changed_when: false
+      register: _git_version
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Check Git meets the Bitbucket requirement on Ubuntu 22.04
+      ansible.builtin.assert:
+        that:
+          - _git_version.stdout.split()[-1] is version('2.42.0', '>=')
+        fail_msg: Bitbucket 10.2 requires Git 2.42.0 or newer.
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
   roles:
     - role: buluma.bootstrap
     - role: buluma.epel
