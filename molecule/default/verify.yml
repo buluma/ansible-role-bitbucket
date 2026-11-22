@@ -97,3 +97,6 @@
         - name: Re-raise failure
           ansible.builtin.fail:
             msg: Bitbucket verify failed -- see diagnostics above
+
+- name: Verify unsupported platform handling
+  ansible.builtin.import_playbook: tests/unsupported-platforms.yml
