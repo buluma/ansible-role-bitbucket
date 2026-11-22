@@ -58,6 +58,78 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
       changed_when: false
       failed_when: false
 
+    - name: Gather platform facts
+      ansible.builtin.setup:
+
+    # Ubuntu 22.04 ships Git 2.34; the Git PPA now ships 2.56, which Bitbucket 10.2 also rejects.
+    - name: Install Git build dependencies on Ubuntu 22.04
+      ansible.builtin.apt:
+        name:
+          - build-essential
+          - gettext
+          - libcurl4-openssl-dev
+          - libexpat1-dev
+          - libssl-dev
+          - zlib1g-dev
+        state: present
+        update_cache: true
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Download Git 2.54 source on Ubuntu 22.04
+      ansible.builtin.get_url:
+        url: https://github.com/git/git/archive/refs/tags/v2.54.0.tar.gz
+        dest: /tmp/git-2.54.0.tar.gz
+        checksum: sha256:7b01a23c44c9ccfca2e3ad9daf8cbdd4d4caaaa6b5181e77e16e60c6ae5f772a
+        mode: "0644"
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Unpack Git source on Ubuntu 22.04
+      ansible.builtin.unarchive:
+        src: /tmp/git-2.54.0.tar.gz
+        dest: /tmp
+        remote_src: true
+        creates: /tmp/git-2.54.0/Makefile
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Build and install Git on Ubuntu 22.04
+      ansible.builtin.command:
+        argv:
+          - make
+          - -C
+          - /tmp/git-2.54.0
+          - -j2
+          - prefix=/usr/local
+          - install
+        creates: /usr/local/bin/git
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Read Git version on Ubuntu 22.04
+      ansible.builtin.command: git --version
+      changed_when: false
+      register: _git_version
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
+    - name: Check Git meets the Bitbucket requirement on Ubuntu 22.04
+      ansible.builtin.assert:
+        that:
+          - _git_version.stdout.split()[-1] is version('2.42.0', '>=')
+          - _git_version.stdout.split()[-1] is version('2.55.0', '<')
+          - _git_version.stdout.split()[-1].split('.')[0:2] | join('.') not in ['2.48', '2.51', '2.52', '2.53']
+        fail_msg: Bitbucket 10.2 requires a supported Git version between 2.42 and 2.54.
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution_version'] == '22.04'
+
   roles:
     - role: buluma.bootstrap
     - role: buluma.epel
