@@ -6,7 +6,10 @@
 
 **Merged pull requests:**
 
+- ANS-71: Reject unavailable Bitbucket repositories [\#43](https://github.com/buluma/ansible-role-bitbucket/pull/43) ([buluma](https://github.com/buluma))
+- Update CHANGELOG.md [\#42](https://github.com/buluma/ansible-role-bitbucket/pull/42) ([github-actions[bot]](https://github.com/apps/github-actions))
 - ANS-70: Fix changelog workflow [\#41](https://github.com/buluma/ansible-role-bitbucket/pull/41) ([buluma](https://github.com/buluma))
+- ANS-60: Fetch opensuse keys over https and verify apt key fingerprints [\#40](https://github.com/buluma/ansible-role-bitbucket/pull/40) ([buluma](https://github.com/buluma))
 - ANS-39: Match the 0600 mode Bitbucket applies to bitbucket.properties [\#39](https://github.com/buluma/ansible-role-bitbucket/pull/39) ([buluma](https://github.com/buluma))
 - ANS-39: Migrate apt\_repository to deb822\_repository, set min\_ansible\_version to 2.19 [\#38](https://github.com/buluma/ansible-role-bitbucket/pull/38) ([buluma](https://github.com/buluma))
 - chore\(deps\): bump release-drafter/release-drafter from 7.10.0 to 7.11.0 [\#37](https://github.com/buluma/ansible-role-bitbucket/pull/37) ([dependabot[bot]](https://github.com/apps/dependabot))
