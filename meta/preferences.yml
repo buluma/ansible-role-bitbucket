@@ -8,17 +8,15 @@ platforms:
       - "9"
   - name: Debian
     versions:
-      # Excludes 11/12 (this atlassian-bitbucket package requires Java 21,
-      # unavailable in either release's main repo without backports) --
-      # done as a manual override in .github/workflows/molecule.yml
-      # instead, since generating a Debian versions list containing only
-      # "13" trips a bug in ansible-generator ("object of type 'dict' has
-      # no attribute '13'"). Regenerating this role will silently
-      # reintroduce debian11/12; reapply the override if that happens.
-      - all
+      # Excludes 11/12: this atlassian-bitbucket package requires Java 21,
+      # unavailable in either release's main repo without backports.
+      - "13"
   # Fedora excluded entirely: this atlassian-bitbucket package requires
   # Java 21, which Fedora 43/44 no longer ship (java-21-openjdk was
   # dropped, same as noted in ansible-role-java's history).
   - name: Ubuntu
     versions:
-      - all
+      # Excludes 26.04 (resolute): Bitbucket fails to start there with a
+      # "Fatal Error" page, so the role's verify step never gets a 200.
+      - noble
+      - jammy
