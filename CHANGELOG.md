@@ -2,10 +2,19 @@
 
 ## [Unreleased](https://github.com/buluma/ansible-role-bitbucket/tree/HEAD)
 
-[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.10.9...HEAD)
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.11.0...HEAD)
 
 **Merged pull requests:**
 
+- Regenerate files with ansible-generator [\#45](https://github.com/buluma/ansible-role-bitbucket/pull/45) ([buluma](https://github.com/buluma))
+
+## [v26.11.0](https://github.com/buluma/ansible-role-bitbucket/tree/v26.11.0) (2026-11-22)
+
+[Full Changelog](https://github.com/buluma/ansible-role-bitbucket/compare/v26.10.9...v26.11.0)
+
+**Merged pull requests:**
+
+- Update CHANGELOG.md [\#44](https://github.com/buluma/ansible-role-bitbucket/pull/44) ([github-actions[bot]](https://github.com/apps/github-actions))
 - ANS-71: Reject unavailable Bitbucket repositories [\#43](https://github.com/buluma/ansible-role-bitbucket/pull/43) ([buluma](https://github.com/buluma))
 - Update CHANGELOG.md [\#42](https://github.com/buluma/ansible-role-bitbucket/pull/42) ([github-actions[bot]](https://github.com/apps/github-actions))
 - ANS-70: Fix changelog workflow [\#41](https://github.com/buluma/ansible-role-bitbucket/pull/41) ([buluma](https://github.com/buluma))
